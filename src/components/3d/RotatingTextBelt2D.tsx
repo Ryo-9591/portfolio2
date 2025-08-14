@@ -48,13 +48,40 @@ export default function RotatingTextBelt2D({
 
   return (
     <group ref={groupRef} position={centerPosition}>
-      {/* 透明感のある帯（1つ） */}
+      {/* 高級感のあるメインベルト（グラデーション効果） */}
       <mesh>
         <cylinderGeometry args={[radius, radius, beltWidth, 64, 1, true]} />
-        <meshBasicMaterial color={beltColor} transparent opacity={0.3} side={THREE.DoubleSide} />
+        <meshBasicMaterial 
+          color={beltColor} 
+          transparent 
+          opacity={0.1} 
+          side={THREE.DoubleSide}
+        />
       </mesh>
       
-      {/* テキスト（円周上に3つ配置し、帯と一緒に回転） */}
+      {/* 内側の光るエッジ（サイバーパンク風） */}
+      <mesh>
+        <cylinderGeometry args={[radius - 0.02, radius - 0.02, beltWidth + 0.01, 64, 1, true]} />
+        <meshBasicMaterial 
+          color="#00ffff" 
+          transparent 
+          opacity={0.08} 
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      
+      {/* 外側の光るエッジ（高級感） */}
+      <mesh>
+        <cylinderGeometry args={[radius + 0.02, radius + 0.02, beltWidth + 0.01, 64, 1, true]} />
+        <meshBasicMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.05} 
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      
+      {/* テキスト（高級感のある宇宙ゲーム風スタイル） */}
       {textPositions.map(({ text, position, angle }, index) => (
         <Text
           key={index}
@@ -63,7 +90,8 @@ export default function RotatingTextBelt2D({
           color={color}
           anchorX="center"
           anchorY="middle"
-          rotation={[0, -angle + Math.PI / 2, 0]} // テキストが円周上に沿って向くように
+          rotation={[0, -angle + Math.PI / 2, 0]}
+          font="/fonts/Orbitron-Bold.ttf"
         >
           {text}
         </Text>

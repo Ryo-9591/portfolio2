@@ -164,21 +164,21 @@ export default function SpaceScene() {
                                    {/* ロケット周りのテキストベルト */}
              <RotatingTextBelt2D
                text="ROCKET"
-               centerPosition={[0, 25, 0]}
+               centerPosition={[0, 30, 0]}
                radius={8}
-               height={25}
+               height={30}
                rotationSpeed={0.6}
-               color="#facc15"
-               fontSize={3.0}
-               beltColor="#facc15"
-               beltWidth={2.5}
+               color="#ea580c"
+               fontSize={2.5}
+               beltColor="#ea580c"
+               beltWidth={3.0}
              />
 
                                                                                        {/* 宇宙飛行士（ロケットの近く） - 初期ロード時のみアニメーション */}
                              <Universal3DModel
                  modelPath="/models/astronaut.glb"
                  fallbackComponent={AstronautFallback}
-                 position={[8, 5, 3]}
+                 position={[12, 8, 6]}
                  scale={[5.0, 5.0, 5.0]}
              optimizationLevel="high"
              enableLOD={true}
@@ -202,14 +202,14 @@ export default function SpaceScene() {
                                    {/* 宇宙飛行士周りのテキストベルト */}
              <RotatingTextBelt2D
                text="PROFILE"
-               centerPosition={[8, 15, 3]}
-               radius={6}
-               height={15}
+               centerPosition={[12, 18, 6]}
+               radius={5}
+               height={18}
                rotationSpeed={0.7}
                color="#60a5fa"
-               fontSize={2.5}
+               fontSize={2.0}
                beltColor="#60a5fa"
-               beltWidth={2.0}
+               beltWidth={2.5}
              />
 
                      {/* 惑星（プロジェクト） - 惑星モデル使用 */}
@@ -254,7 +254,7 @@ export default function SpaceScene() {
                    modelPath="/models/satelite.glb"
                    fallbackComponent={SatelliteFallback}
                    position={[35, -15, 30]}
-                   scale={[0.1, 0.1, 0.1]}
+                   scale={[0.15, 0.15, 0.15]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -282,9 +282,9 @@ export default function SpaceScene() {
                height={-5}
                rotationSpeed={0.9}
                color="#22c55e"
-               fontSize={2.0}
+               fontSize={1.5}
                beltColor="#22c55e"
-               beltWidth={1.5}
+               beltWidth={2.0}
              />
 
                                                                                                                         {/* 宇宙ステーション（スキル/ブログ） - 軽量化済み */}
@@ -320,9 +320,9 @@ export default function SpaceScene() {
                height={35}
                rotationSpeed={0.5}
                color="#a855f7"
-               fontSize={3.0}
+               fontSize={2.5}
                beltColor="#a855f7"
-               beltWidth={2.0}
+               beltWidth={2.5}
              />
 
                                        {/* 宇宙エフェクト - 軽量化のため一時無効化 */}
@@ -344,9 +344,9 @@ export default function SpaceScene() {
                     height={y + 20}
                     rotationSpeed={0.4}
                     color="#fbbf24"
-                    fontSize={2.0}
+                    fontSize={1.5}
                     beltColor="#fbbf24"
-                    beltWidth={1.5}
+                    beltWidth={2.0}
                   />
                 )
               })}
