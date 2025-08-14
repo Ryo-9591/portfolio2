@@ -95,8 +95,8 @@ export default function SpaceScene() {
          performance={{ min: 0.02 }} // 最低フレームレートをさらに下げて軽量化
          shadows={false} // 影を無効
        >
-        {/* カメラ設定 */}
-        <PerspectiveCamera makeDefault position={[0, 0, 25]} fov={75} />
+                                                                       {/* カメラ設定 */}
+           <PerspectiveCamera makeDefault position={[0, 120, 500]} fov={50} />
         
         {/* コントロール */}
         <OrbitControls
@@ -132,12 +132,12 @@ export default function SpaceScene() {
         
         {/* 3Dオブジェクト */}
         <Suspense fallback={null}>
-                     {/* ロケット（中央） - 初期ロード時のみアニメーション */}
-           <Universal3DModel
-             modelPath="/models/rocket.glb"
-             fallbackComponent={RocketFallback}
-             position={[0, 0, 0]}
-             scale={[2.0, 2.0, 2.0]}
+                                           {/* ロケット（中央） - 初期ロード時のみアニメーション */}
+                                                                                                                                                                                                                                                                                                                                                                                                                               <Universal3DModel
+                   modelPath="/models/rocket.glb"
+                   fallbackComponent={RocketFallback}
+                   position={[0, 0, 0]}
+                   scale={[6.0, 6.0, 6.0]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -159,12 +159,12 @@ export default function SpaceScene() {
            />
 
 
-                     {/* 宇宙飛行士（ロケットの近く） - 初期ロード時のみアニメーション */}
-           <Universal3DModel
-             modelPath="/models/astronaut.glb"
-             fallbackComponent={AstronautFallback}
-             position={[2.5, 1, 1]}
-             scale={[2.5, 2.5, 2.5]}
+                                                                                       {/* 宇宙飛行士（ロケットの近く） - 初期ロード時のみアニメーション */}
+                             <Universal3DModel
+                 modelPath="/models/astronaut.glb"
+                 fallbackComponent={AstronautFallback}
+                 position={[15, 2, 0]}
+                 scale={[5.0, 5.0, 5.0]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -186,11 +186,11 @@ export default function SpaceScene() {
 
 
                      {/* 惑星（プロジェクト） - 惑星モデル使用 */}
-           {projects.map((project, index) => {
-             const angle = (index / projects.length) * Math.PI * 2
-             const radius = 12 // 半径を20から12に縮小してロケットに近づける
-             const x = Math.cos(angle) * radius
-             const z = Math.sin(angle) * radius
+                                   {projects.map((project, index) => {
+               const angle = (index / projects.length) * Math.PI * 2
+                                                               const radius = 60 // 美しい円形配置のための適切な半径
+               const x = Math.cos(angle) * radius
+               const z = Math.sin(angle) * radius
 
              return (
                <Universal3DModel
@@ -198,8 +198,8 @@ export default function SpaceScene() {
                  modelPath={`/models/${project.planetModel}`}
                  fallbackComponent={ProjectFallback}
                  position={[x, Math.sin(angle * 2) * 2, z]}
-                 scale={project.planetModel === 'jupiter.glb' ? [0.275, 0.275, 0.275] : 
-                        project.planetModel === 'earth.glb' ? [0.225, 0.225, 0.225] : [1.5, 1.5, 1.5]}
+                                                                       scale={project.planetModel === 'jupiter.glb' ? [1.0, 1.0, 1.0] : 
+                          project.planetModel === 'earth.glb' ? [0.8, 0.8, 0.8] : [4.0, 4.0, 4.0]}
                  optimizationLevel="project"
                  enableLOD={false}
                  enableStats={false}
@@ -222,12 +222,12 @@ export default function SpaceScene() {
              )
            })}
 
-                                         {/* 衛星（問い合わせ） - 高品質 */}
-           <Universal3DModel
-             modelPath="/models/satelite.glb"
-             fallbackComponent={SatelliteFallback}
-             position={[15, 8, 15]}
-             scale={[0.05, 0.05, 0.05]}
+                                                                 {/* 衛星（問い合わせ） - 高品質 */}
+                                                                                                               <Universal3DModel
+                  modelPath="/models/satelite.glb"
+                  fallbackComponent={SatelliteFallback}
+                  position={[25, 8, 20]}
+                  scale={[0.1, 0.1, 0.1]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -248,12 +248,12 @@ export default function SpaceScene() {
            />
 
 
-                                                                                   {/* 宇宙ステーション（スキル/ブログ） - 軽量化済み */}
-           <Universal3DModel
-             modelPath="/models/space-station.glb"
-             fallbackComponent={SpaceStationFallback}
-             position={[-25, 12, -18]}
-             scale={[0.75, 0.75, 0.75]}
+                                                                                                                       {/* 宇宙ステーション（スキル/ブログ） - 軽量化済み */}
+                                                                                                                       <Universal3DModel
+                   modelPath="/models/space-station.glb"
+                   fallbackComponent={SpaceStationFallback}
+                   position={[-25, 5, -20]}
+                   scale={[1.5, 1.5, 1.5]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -293,26 +293,26 @@ export default function SpaceScene() {
         </Suspense>
       </Canvas>
 
-      {/* HTML ラベル - 軽量 */}
-      <HtmlLabel text="ROCKET" position={[0, 7.0, 0]} color="#facc15" />
-      <HtmlLabel text="PROFILE" position={[2.5, 6.0, 1]} color="#60a5fa" />
-      <HtmlLabel text="CONTACT" position={[15, 11, 15]} color="#22c55e" />
-      <HtmlLabel text="STATION" position={[-25, 16, -18]} color="#a855f7" />
+                           {/* HTML ラベル - 軽量 */}
+        <HtmlLabel text="ROCKET" position={[0, 15.0, 0]} color="#facc15" />
+                             <HtmlLabel text="PROFILE" position={[15, 12, 0]} color="#60a5fa" />
+                                                           <HtmlLabel text="CONTACT" position={[25, 18, 20]} color="#22c55e" />
+                                                          <HtmlLabel text="STATION" position={[-25, 15, -20]} color="#a855f7" />
       
              {/* プロジェクトラベル */}
-       {projects.map((project, index) => {
-         const angle = (index / projects.length) * Math.PI * 2
-         const radius = 12 // 半径を20から12に縮小
-         const x = Math.cos(angle) * radius
-         const z = Math.sin(angle) * radius
-         return (
-           <HtmlLabel 
-             key={`project-label-${index}`}
-             text="PROJECTS" 
-             position={[x, Math.sin(angle * 2) * 2 + 5, z]} 
-             color="#fbbf24" 
-           />
-         )
+                                                               {projects.map((project, index) => {
+            const angle = (index / projects.length) * Math.PI * 2
+                                                   const radius = 60 // 美しい円形配置のための適切な半径
+            const x = Math.cos(angle) * radius
+            const z = Math.sin(angle) * radius
+                   return (
+            <HtmlLabel 
+              key={`project-label-${index}`}
+              text="PROJECTS" 
+              position={[x, Math.sin(angle * 2) * 2 + 8, z]} 
+              color="#fbbf24" 
+            />
+          )
        })}
 
       {/* ホバー情報 */}

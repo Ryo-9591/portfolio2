@@ -24,22 +24,14 @@ export function LabelUpdater() {
    
   const { camera, size } = useThree()
   const vector = useRef(new Vector3())
-  const isInitialized = useRef(false)
 
-  // ロード時のみ座標計算（パフォーマンス向上）
+  // 座標計算（シンプル化）
   useEffect(() => {
-    if (!context) {
-      console.log('LabelUpdater: context not available')
-      return
-    }
+    if (!context) return
     
     const calculatePositions = () => {
-      if (context.labels.length === 0) {
-        console.log('LabelUpdater: no labels to calculate')
-        return
-      }
+      if (context.labels.length === 0) return
       
-      console.log(`Calculating positions for ${context.labels.length} labels`)
       context.labels.forEach((label) => {
         try {
           // 3D座標をスクリーン座標に変換
@@ -50,12 +42,10 @@ export function LabelUpdater() {
           const x = Math.round((vector.current.x * 0.5 + 0.5) * size.width)
           const y = Math.round((vector.current.y * -0.5 + 0.5) * size.height)
 
-                     // 可視性判定（テキスト表示を確実にするため大幅に緩和）
-           const isVisible = vector.current.z < 50.0 && 
-                            x >= -2000 && x <= size.width + 2000 &&
-                            y >= -2000 && y <= size.height + 2000
-
-          console.log(`Label ${label.id}: x=${x}, y=${y}, z=${vector.current.z}, visible=${isVisible}`)
+          // 可視性判定（シンプル化）
+          const isVisible = vector.current.z < 50.0 && 
+                           x >= -2000 && x <= size.width + 2000 &&
+                           y >= -2000 && y <= size.height + 2000
 
           // 更新
           context.updateLabel(label.id, { x, y, visible: isVisible })
@@ -65,37 +55,8 @@ export function LabelUpdater() {
       })
     }
 
-    // 初期計算（複数回試行して確実に実行）
-    const initialCalculation = () => {
-      if (context.labels.length > 0) {
-        calculatePositions()
-        isInitialized.current = true
-        console.log('LabelUpdater: initial calculation completed')
-      } else {
-        console.log('LabelUpdater: retrying initial calculation...')
-        setTimeout(initialCalculation, 200)
-      }
-    }
-
-    // 初期計算開始
-    setTimeout(initialCalculation, 100)
-
-    // カメラ変更時のみ再計算（ユーザー操作時）
-    const handleCameraChange = () => {
-      setTimeout(calculatePositions, 100) // 少し遅延させて安定化
-    }
-
-    // カメラ変更を検知（簡易的な方法）
-    const checkCameraChange = () => {
-      if (camera.position.x !== 0 || camera.position.y !== 0 || camera.position.z !== 25) {
-        handleCameraChange()
-      }
-    }
-
-    // 定期的にカメラ変更をチェック（低頻度）
-    const interval = setInterval(checkCameraChange, 2000) // 2秒に1回
-
-    return () => clearInterval(interval)
+    // 初期計算
+    setTimeout(calculatePositions, 100)
   }, [context, camera, size])
 
   return null
@@ -126,14 +87,11 @@ export function LabelProvider({ children }: { children: React.ReactNode }) {
     })
   }
 
-    // ラベル追加（デバッグログ追加）
+    // ラベル追加
   const addLabel = (label: { id: string, text: string, position: [number, number, number], color: string }) => {
-    console.log(`Adding label to context:`, label)
     setLabels(prev => {
       const filtered = prev.filter(l => l.id !== label.id)
-      const newLabels = [...filtered, label]
-      console.log(`Total labels in context:`, newLabels.length)
-      return newLabels
+      return [...filtered, label]
     })
   }
 
@@ -142,13 +100,7 @@ export function LabelProvider({ children }: { children: React.ReactNode }) {
       {children}
              {/* HTML ラベルレンダリング */}
                {labels.map((label) => {
-          console.log(`Rendering label ${label.id}:`, label.screenPosition)
-          
-          // 可視性チェックを緩和（デバッグ用）
-          if (!label.screenPosition) {
-            console.log(`Label ${label.id}: no screenPosition`)
-            return null
-          }
+          if (!label.screenPosition) return null
           
           // 座標が有効な範囲内かチェック
           const isValidPosition = label.screenPosition.x !== undefined && 
@@ -156,10 +108,7 @@ export function LabelProvider({ children }: { children: React.ReactNode }) {
                                  !isNaN(label.screenPosition.x) && 
                                  !isNaN(label.screenPosition.y)
           
-          if (!isValidPosition) {
-            console.log(`Label ${label.id}: invalid position`, label.screenPosition)
-            return null
-          }
+          if (!isValidPosition) return null
           
           return (
             <div
@@ -178,25 +127,35 @@ export function LabelProvider({ children }: { children: React.ReactNode }) {
                                  <div 
                    className="text-sm font-medium tracking-wide select-none"
                    style={{
-                     textShadow: `
-                       0 0 15px ${label.color}30,
-                       0 0 30px ${label.color}20,
-                       0 0 45px ${label.color}10,
-                       1px 1px 2px rgba(0,0,0,0.2),
-                       -0.5px -0.5px 0px rgba(0,0,0,0.3),
-                       0.5px -0.5px 0px rgba(0,0,0,0.3),
-                       -0.5px 0.5px 0px rgba(0,0,0,0.3),
-                       0.5px 0.5px 0px rgba(0,0,0,0.3)
-                     `,
-                     fontFamily: '"Permanent Marker", "Caveat", "Kalam", cursive',
-                     letterSpacing: '0.1em',
-                     fontSize: '16px',
+                     fontFamily: '"Space Mono", "Courier New", monospace',
+                     letterSpacing: '0.2em',
+                     fontSize: '14px',
                      fontWeight: '400',
                      textTransform: 'uppercase',
-                     opacity: '0.8',
+                     color: `${label.color}`,
                      zIndex: '9999',
                      display: 'block',
-                     visibility: 'visible'
+                     visibility: 'visible',
+                     background: `linear-gradient(135deg, 
+                       rgba(255,255,255,0.1) 0%, 
+                       rgba(255,255,255,0.05) 50%, 
+                       rgba(255,255,255,0.1) 100%)`,
+                     backdropFilter: 'blur(10px)',
+                     WebkitBackdropFilter: 'blur(10px)',
+                     border: `1px solid rgba(255,255,255,0.2)`,
+                     borderRadius: '20px',
+                     padding: '8px 16px',
+                     boxShadow: `
+                       0 8px 32px rgba(0,0,0,0.3),
+                       inset 0 1px 0 rgba(255,255,255,0.1),
+                       0 0 20px ${label.color}40
+                     `,
+                     textShadow: `
+                       0 0 10px ${label.color},
+                       0 0 20px ${label.color}80,
+                       0 0 30px ${label.color}60
+                     `,
+                     animation: 'glassFloat 4s ease-in-out infinite'
                    }}
                  >
                   {label.text}
@@ -233,9 +192,5 @@ interface HtmlLabelProps {
 export default function HtmlLabel({ text, position, color = '#ffffff' }: HtmlLabelProps) {
   const id = `${text}-${position.join('-')}`
   useRegisterLabel(id, text, position, color)
-  
-  // デバッグ用：ラベルが登録されているか確認
-  console.log(`HtmlLabel registered: ${id}`, { text, position, color })
-  
   return null
 }

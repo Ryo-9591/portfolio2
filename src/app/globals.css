@@ -2,6 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 宇宙フォントの読み込み */
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@400;600;700;900&family=Audiowide&family=Russo+One:wght@400;700&display=swap');
+
+/* ガラスフロートアニメーション */
+@keyframes glassFloat {
+  0% {
+    transform: translateY(0px) scale(1);
+    boxShadow: 
+      0 8px 32px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      0 0 20px currentColor;
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+    boxShadow: 
+      0 16px 48px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.15),
+      0 0 30px currentColor;
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+    boxShadow: 
+      0 8px 32px rgba(0,0,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.1),
+      0 0 20px currentColor;
+  }
+}
+
 /* カスタムスタイル */
 @layer base {
   * {
