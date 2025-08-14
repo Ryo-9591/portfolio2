@@ -37,12 +37,13 @@ export default function RotatingTextBelt2D({
     }
   })
 
-  // テキストを円周上に沿って配置（帯の外側に）
-  const textPositions = text.split('').map((char, index) => {
-    const angle = (index / text.length) * Math.PI * 2
+  // テキストを3つ、円周上に均等に配置（帯の外側に）
+  const textCount = 3
+  const textPositions = Array.from({ length: textCount }, (_, index) => {
+    const angle = (index / textCount) * Math.PI * 2
     const x = Math.cos(angle) * (radius + 0.5)
     const z = Math.sin(angle) * (radius + 0.5)
-    return { char, position: [x, 0, z] as [number, number, number], angle }
+    return { text, position: [x, 0, z] as [number, number, number], angle }
   })
 
   return (
@@ -53,8 +54,8 @@ export default function RotatingTextBelt2D({
         <meshBasicMaterial color={beltColor} transparent opacity={0.3} side={THREE.DoubleSide} />
       </mesh>
       
-      {/* テキスト（帯の円周上に沿って配置し、帯と一緒に回転） */}
-      {textPositions.map(({ char, position, angle }, index) => (
+      {/* テキスト（円周上に3つ配置し、帯と一緒に回転） */}
+      {textPositions.map(({ text, position, angle }, index) => (
         <Text
           key={index}
           position={position}
@@ -64,7 +65,7 @@ export default function RotatingTextBelt2D({
           anchorY="middle"
           rotation={[0, -angle + Math.PI / 2, 0]} // テキストが円周上に沿って向くように
         >
-          {char}
+          {text}
         </Text>
       ))}
     </group>

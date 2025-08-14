@@ -164,9 +164,9 @@ export default function SpaceScene() {
                                    {/* ロケット周りのテキストベルト */}
              <RotatingTextBelt2D
                text="ROCKET"
-               centerPosition={[0, 15, 0]}
-               radius={12}
-               height={15}
+               centerPosition={[0, 25, 0]}
+               radius={8}
+               height={25}
                rotationSpeed={0.6}
                color="#facc15"
                fontSize={3.0}
@@ -203,7 +203,7 @@ export default function SpaceScene() {
              <RotatingTextBelt2D
                text="PROFILE"
                centerPosition={[8, 15, 3]}
-               radius={8}
+               radius={6}
                height={15}
                rotationSpeed={0.7}
                color="#60a5fa"
@@ -226,7 +226,7 @@ export default function SpaceScene() {
                  fallbackComponent={ProjectFallback}
                                    position={[x, Math.sin(angle * 2) * 3 + 5, z]}
                                                                        scale={project.planetModel === 'jupiter.glb' ? [1.0, 1.0, 1.0] : 
-                          project.planetModel === 'earth.glb' ? [0.8, 0.8, 0.8] : [4.0, 4.0, 4.0]}
+                          project.planetModel === 'earth.glb' ? [0.8, 0.8, 0.8] : [10.0, 10.0, 10.0]}
                  optimizationLevel="project"
                  enableLOD={false}
                  enableStats={false}
@@ -253,7 +253,7 @@ export default function SpaceScene() {
                                                                                                                                                                                                                                <Universal3DModel
                    modelPath="/models/satelite.glb"
                    fallbackComponent={SatelliteFallback}
-                   position={[25, -5, 20]}
+                   position={[35, -15, 30]}
                    scale={[0.1, 0.1, 0.1]}
              optimizationLevel="high"
              enableLOD={true}
@@ -277,9 +277,9 @@ export default function SpaceScene() {
                                    {/* 衛星周りのテキストベルト */}
              <RotatingTextBelt2D
                text="CONTACT"
-               centerPosition={[25, 5, 20]}
+               centerPosition={[35, -5, 30]}
                radius={12}
-               height={5}
+               height={-5}
                rotationSpeed={0.9}
                color="#22c55e"
                fontSize={2.0}
@@ -291,8 +291,8 @@ export default function SpaceScene() {
                                                                                                                                                                                                                                                <Universal3DModel
                     modelPath="/models/space-station.glb"
                     fallbackComponent={SpaceStationFallback}
-                    position={[-25, 25, -20]}
-                    scale={[1.5, 1.5, 1.5]}
+                    position={[-40, 25, -20]}
+                    scale={[3.0, 3.0, 3.0]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -315,7 +315,7 @@ export default function SpaceScene() {
                                    {/* 宇宙ステーション周りのテキストベルト */}
              <RotatingTextBelt2D
                text="STATION"
-               centerPosition={[-25, 35, -20]}
+               centerPosition={[-40, 35, -20]}
                radius={10}
                height={35}
                rotationSpeed={0.5}
@@ -339,9 +339,9 @@ export default function SpaceScene() {
                   <RotatingTextBelt2D
                     key={`project-label-${index}`}
                     text="PROJECTS"
-                    centerPosition={[x, y + 8, z]}
+                    centerPosition={[x, y + 12, z]}
                     radius={8}
-                    height={y + 16}
+                    height={y + 20}
                     rotationSpeed={0.4}
                     color="#fbbf24"
                     fontSize={2.0}
