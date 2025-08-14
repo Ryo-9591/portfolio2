@@ -12,6 +12,7 @@ import SatelliteFallback from './3d/models/fallbacks/SatelliteFallback'
 import SpaceStationFallback from './3d/models/fallbacks/SpaceStationFallback'
 import HtmlLabel, { LabelProvider, LabelUpdater } from './ui/HtmlLabel'
 import SpaceEffects from './3d/SpaceEffects'
+import RotatingTextBelt2D from './3d/RotatingTextBelt2D'
 
 import ProfileModal from './modals/ProfileModal'
 import ProjectModal from './modals/ProjectModal'
@@ -130,6 +131,8 @@ export default function SpaceScene() {
         {/* ラベル更新 */}
         <LabelUpdater />
         
+                                            
+        
         {/* 3Dオブジェクト */}
         <Suspense fallback={null}>
                                            {/* ロケット（中央） - 初期ロード時のみアニメーション */}
@@ -158,12 +161,24 @@ export default function SpaceScene() {
              onPointerOut={() => setHoverData(null)}
            />
 
+                                   {/* ロケット周りのテキストベルト */}
+             <RotatingTextBelt2D
+               text="ROCKET"
+               centerPosition={[0, 15, 0]}
+               radius={12}
+               height={15}
+               rotationSpeed={0.6}
+               color="#facc15"
+               fontSize={3.0}
+               beltColor="#facc15"
+               beltWidth={2.5}
+             />
 
                                                                                        {/* 宇宙飛行士（ロケットの近く） - 初期ロード時のみアニメーション */}
                              <Universal3DModel
                  modelPath="/models/astronaut.glb"
                  fallbackComponent={AstronautFallback}
-                 position={[15, 2, 0]}
+                 position={[8, 5, 3]}
                  scale={[5.0, 5.0, 5.0]}
              optimizationLevel="high"
              enableLOD={true}
@@ -184,6 +199,18 @@ export default function SpaceScene() {
              onPointerOut={() => setHoverData(null)}
            />
 
+                                   {/* 宇宙飛行士周りのテキストベルト */}
+             <RotatingTextBelt2D
+               text="PROFILE"
+               centerPosition={[8, 15, 3]}
+               radius={8}
+               height={15}
+               rotationSpeed={0.7}
+               color="#60a5fa"
+               fontSize={2.5}
+               beltColor="#60a5fa"
+               beltWidth={2.0}
+             />
 
                      {/* 惑星（プロジェクト） - 惑星モデル使用 */}
                                    {projects.map((project, index) => {
@@ -197,7 +224,7 @@ export default function SpaceScene() {
                  key={project.id}
                  modelPath={`/models/${project.planetModel}`}
                  fallbackComponent={ProjectFallback}
-                 position={[x, Math.sin(angle * 2) * 2, z]}
+                                   position={[x, Math.sin(angle * 2) * 3 + 5, z]}
                                                                        scale={project.planetModel === 'jupiter.glb' ? [1.0, 1.0, 1.0] : 
                           project.planetModel === 'earth.glb' ? [0.8, 0.8, 0.8] : [4.0, 4.0, 4.0]}
                  optimizationLevel="project"
@@ -223,11 +250,11 @@ export default function SpaceScene() {
            })}
 
                                                                  {/* 衛星（問い合わせ） - 高品質 */}
-                                                                                                               <Universal3DModel
-                  modelPath="/models/satelite.glb"
-                  fallbackComponent={SatelliteFallback}
-                  position={[25, 8, 20]}
-                  scale={[0.1, 0.1, 0.1]}
+                                                                                                                                                                                                                               <Universal3DModel
+                   modelPath="/models/satelite.glb"
+                   fallbackComponent={SatelliteFallback}
+                   position={[25, -5, 20]}
+                   scale={[0.1, 0.1, 0.1]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -244,16 +271,28 @@ export default function SpaceScene() {
                  })
                }
              }}
-             onPointerOut={() => setHoverData(null)}
+                          onPointerOut={() => setHoverData(null)}
            />
 
+                                   {/* 衛星周りのテキストベルト */}
+             <RotatingTextBelt2D
+               text="CONTACT"
+               centerPosition={[25, 5, 20]}
+               radius={12}
+               height={5}
+               rotationSpeed={0.9}
+               color="#22c55e"
+               fontSize={2.0}
+               beltColor="#22c55e"
+               beltWidth={1.5}
+             />
 
-                                                                                                                       {/* 宇宙ステーション（スキル/ブログ） - 軽量化済み */}
-                                                                                                                       <Universal3DModel
-                   modelPath="/models/space-station.glb"
-                   fallbackComponent={SpaceStationFallback}
-                   position={[-25, 5, -20]}
-                   scale={[1.5, 1.5, 1.5]}
+                                                                                                                        {/* 宇宙ステーション（スキル/ブログ） - 軽量化済み */}
+                                                                                                                                                                                                                                               <Universal3DModel
+                    modelPath="/models/space-station.glb"
+                    fallbackComponent={SpaceStationFallback}
+                    position={[-25, 25, -20]}
+                    scale={[1.5, 1.5, 1.5]}
              optimizationLevel="high"
              enableLOD={true}
              enableStats={false}
@@ -273,47 +312,48 @@ export default function SpaceScene() {
              onPointerOut={() => setHoverData(null)}
            />
 
-          
+                                   {/* 宇宙ステーション周りのテキストベルト */}
+             <RotatingTextBelt2D
+               text="STATION"
+               centerPosition={[-25, 35, -20]}
+               radius={10}
+               height={35}
+               rotationSpeed={0.5}
+               color="#a855f7"
+               fontSize={3.0}
+               beltColor="#a855f7"
+               beltWidth={2.0}
+             />
 
+                                       {/* 宇宙エフェクト - 軽量化のため一時無効化 */}
+          {/* <SpaceEffects center={[0, 0, 0]} /> */}
 
-
-
-
-
-          
-
-
-
-
-
-
-
-                   {/* 宇宙エフェクト - 軽量化のため一時無効化 */}
-         {/* <SpaceEffects center={[0, 0, 0]} /> */}
-        </Suspense>
+                                                                                                                                                                               {/* プロジェクトラベル（回転テキストベルト） */}
+              {projects.map((project, index) => {
+                const angle = (index / projects.length) * Math.PI * 2
+                const radius = 60 // 美しい円形配置のための適切な半径
+                const x = Math.cos(angle) * radius
+                const z = Math.sin(angle) * radius
+                const y = Math.sin(angle * 2) * 3 + 5
+                return (
+                  <RotatingTextBelt2D
+                    key={`project-label-${index}`}
+                    text="PROJECTS"
+                    centerPosition={[x, y + 8, z]}
+                    radius={8}
+                    height={y + 16}
+                    rotationSpeed={0.4}
+                    color="#fbbf24"
+                    fontSize={2.0}
+                    beltColor="#fbbf24"
+                    beltWidth={1.5}
+                  />
+                )
+              })}
+         </Suspense>
       </Canvas>
 
-                           {/* HTML ラベル - 軽量 */}
-        <HtmlLabel text="ROCKET" position={[0, 15.0, 0]} color="#facc15" />
-                             <HtmlLabel text="PROFILE" position={[15, 12, 0]} color="#60a5fa" />
-                                                           <HtmlLabel text="CONTACT" position={[25, 18, 20]} color="#22c55e" />
-                                                          <HtmlLabel text="STATION" position={[-25, 15, -20]} color="#a855f7" />
-      
-             {/* プロジェクトラベル */}
-                                                               {projects.map((project, index) => {
-            const angle = (index / projects.length) * Math.PI * 2
-                                                   const radius = 60 // 美しい円形配置のための適切な半径
-            const x = Math.cos(angle) * radius
-            const z = Math.sin(angle) * radius
-                   return (
-            <HtmlLabel 
-              key={`project-label-${index}`}
-              text="PROJECTS" 
-              position={[x, Math.sin(angle * 2) * 2 + 8, z]} 
-              color="#fbbf24" 
-            />
-          )
-       })}
+                                                       
 
       {/* ホバー情報 */}
       <AnimatePresence>
