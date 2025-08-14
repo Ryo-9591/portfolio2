@@ -21,8 +21,8 @@ export const modelConfig: Record<string, ModelConfig> = {
   },
   satellite: {
     name: 'satellite', 
-    path: '/models/satellite.glb',
-    enabled: false, // ← 重いモデルを無効化（約10MB）
+    path: '/models/satelite.glb', // ← 正しいファイル名に修正
+    enabled: true, // ← contactモデルとして有効化
     format: 'glb',
     fileSize: '~10MB',
     priority: 'high'
@@ -38,7 +38,7 @@ export const modelConfig: Record<string, ModelConfig> = {
   earth: {
     name: 'earth',
     path: '/models/earth.glb',
-    enabled: false, // ← 重いモデルを無効化（約4.3MB）
+    enabled: true, // ← projectsの惑星として有効化
     format: 'glb',
     fileSize: '~4.3MB',
     priority: 'high' // 地球は重要なので優先度を上げる
@@ -110,10 +110,18 @@ export const modelConfig: Record<string, ModelConfig> = {
   astronaut: {
     name: 'astronaut',
     path: '/models/astronaut.glb',
-    enabled: false, // ← 重いモデルを無効化（約2.4MB）
+    enabled: true, // ← 宇宙飛行士モデルを有効化
     format: 'glb',
     fileSize: '~2.4MB',
     priority: 'high'
+  },
+  ufo: {
+    name: 'ufo',
+    path: '/models/ufo.glb',
+    enabled: true, // ← UFOモデルを追加
+    format: 'glb',
+    fileSize: '~1.2MB',
+    priority: 'medium'
   }
 }
 

@@ -7,6 +7,7 @@ import { Group } from 'three'
 import * as THREE from 'three'
 import { optimizeModel, createLOD, getModelStats, OptimizationConfig, DEFAULT_OPTIMIZATION, PROJECT_OPTIMIZATION } from '../../../utils/modelOptimization'
 import ModelErrorBoundary from './ModelErrorBoundary'
+import SafeGLTFLoader from './SafeGLTFLoader'
 
 export interface Universal3DModelProps {
   modelPath: string
@@ -73,28 +74,33 @@ function Model3D({
       // シンプルなマテリアル変換（エラー回避）
       clonedScene.traverse((child) => {
         if (child instanceof THREE.Mesh && child.material) {
-          if (Array.isArray(child.material)) {
-            child.material = child.material.map(mat => {
+          try {
+            if (Array.isArray(child.material)) {
+              child.material = child.material.map(mat => {
+                if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
+                  return new THREE.MeshBasicMaterial({
+                    map: mat.map || null,
+                    color: mat.color ? mat.color.clone() : new THREE.Color(0xffffff),
+                    transparent: mat.transparent || false,
+                    opacity: mat.opacity !== undefined ? mat.opacity : 1.0
+                  })
+                }
+                return mat
+              })
+            } else {
+              const mat = child.material
               if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
-                return new THREE.MeshBasicMaterial({
-                  map: mat.map,
-                  color: mat.color.clone(),
-                  transparent: mat.transparent,
-                  opacity: mat.opacity
+                child.material = new THREE.MeshBasicMaterial({
+                  map: mat.map || null,
+                  color: mat.color ? mat.color.clone() : new THREE.Color(0xffffff),
+                  transparent: mat.transparent || false,
+                  opacity: mat.opacity !== undefined ? mat.opacity : 1.0
                 })
               }
-              return mat
-            })
-          } else {
-            const mat = child.material
-            if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
-              child.material = new THREE.MeshBasicMaterial({
-                map: mat.map,
-                color: mat.color.clone(),
-                transparent: mat.transparent,
-                opacity: mat.opacity
-              })
             }
+          } catch (materialError) {
+            console.warn('Material conversion failed for mesh:', materialError)
+            // マテリアル変換に失敗した場合は元のままにする
           }
         }
       })
@@ -199,28 +205,43 @@ function Model3D({
   )
 }
 
-// メインコンポーネント
+// メインコンポーネント（安全なローダー使用）
 export default function Universal3DModel(props: Universal3DModelProps) {
-  const { fallbackComponent: FallbackComponent } = props
-  
   return (
-    <ModelErrorBoundary 
-      fallback={FallbackComponent} 
-      fallbackProps={props}
-    >
-      <Suspense fallback={<FallbackComponent {...props} />}>
-        <Model3D {...props} />
-      </Suspense>
-    </ModelErrorBoundary>
+    <SafeGLTFLoader 
+      {...props}
+      onLoadSuccess={(scene) => {
+        if (props.enableStats) {
+          const stats = getModelStats(scene)
+          console.log(`Model loaded: ${props.modelPath}`, stats)
+        }
+      }}
+      onLoadError={(error) => {
+        // エラーは既にSafeGLTFLoaderで処理済み
+      }}
+    />
   )
 }
 
-// プリロード機能（エラー抑制付き）
+// プリロード機能（完全エラー抑制）
 export function preloadModel(modelPath: string) {
-  try {
-    useGLTF.preload(modelPath)
-  } catch (error) {
-    // モデルファイルが存在しない場合はフォールバックを使用
-    console.warn(`Model preload failed: ${modelPath}, will use fallback`)
-  }
+  // プリロードは任意 - エラーが発生してもフォールバックで対応
+  setTimeout(() => {
+    fetch(modelPath, { method: 'HEAD' })
+      .then(response => {
+        if (response.ok) {
+          try {
+            useGLTF.preload(modelPath)
+            console.log(`✅ Preloaded model: ${modelPath}`)
+          } catch (error) {
+            // プリロードエラーは無視（フォールバックで対応）
+          }
+        } else {
+          console.log(`ℹ️ Model not found, using fallback: ${modelPath}`)
+        }
+      })
+      .catch(() => {
+        console.log(`ℹ️ Model not accessible, using fallback: ${modelPath}`)
+      })
+  }, 100) // 非同期で実行してエラーを回避
 }
