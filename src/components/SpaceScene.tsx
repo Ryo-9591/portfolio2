@@ -93,14 +93,14 @@ export default function SpaceScene() {
         <ambientLight intensity={0.8} />
         <directionalLight position={[10, 10, 5]} intensity={1.0} />
         
-        <Stars 
-          radius={200} 
-          depth={30} 
-          count={1000}
-          factor={2} 
-          saturation={0.4} 
-          fade={true}
-        />
+                 <Stars 
+           radius={200} 
+           depth={30} 
+           count={1000}
+           factor={27} 
+           saturation={0.4} 
+           fade={true}
+         />
         
         <Suspense fallback={null}>
           <Universal3DModel
