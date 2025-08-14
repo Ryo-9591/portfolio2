@@ -1,0 +1,68 @@
+# 🚀 3Dモデルファイル配置ガイド
+
+以下のファイル名で3Dモデル(.glb形式)を配置してください：
+
+## 📁 必要なファイル:
+- rocket.glb (ロケット・宇宙船)
+- satellite.glb (人工衛星)
+- space-station.glb (宇宙ステーション・ISS)
+- earth.glb (地球型惑星)
+- mars.glb (火星型惑星)
+- jupiter.glb (木星型惑星)
+- planet.glb (汎用惑星)
+- asteroid.glb (小惑星・隕石)
+- gas-planet.glb (ガス惑星・土星型)
+
+## 🌟 推奨ダウンロードサイト:
+
+### 1. NASA 3D Models (nasa3d.arc.nasa.gov)
+- 検索キーワード: "Space Shuttle", "ISS", "Satellite"
+- 公式NASA素材、商用利用可能
+- 高品質で正確なモデル
+
+### 2. Sketchfab (sketchfab.com)
+- 検索: "rocket", "satellite", "space station", "planet"
+- フィルター: CC0ライセンス（完全フリー）を選択
+- ダウンロード形式: GLB
+
+### 3. Poly Haven (polyhaven.com)
+- 宇宙関連モデルは少ないが、高品質
+- 完全無料
+
+### 4. Free3D (free3d.com)
+- 検索: "space", "rocket", "satellite"
+- 無料モデルを選択
+
+## 📝 ダウンロード手順:
+1. 上記サイトでモデルを検索
+2. GLB形式でダウンロード
+3. このフォルダに適切な名前で保存
+4. ブラウザを再読み込み
+
+## 🔧 モデルが見つからない場合:
+- フォールバック機能により、シンプルな形状が表示されます
+- 段階的にモデルを追加していけばOKです
+
+## 🚀 GLB最適化のコツ:
+
+### ファイルサイズ目安:
+- ロケット: 2-5MB以下
+- 衛星: 1-3MB以下  
+- 宇宙ステーション: 3-8MB以下
+- 惑星: 2-6MB以下
+
+### 最適化手順:
+1. **Draco圧縮**: ファイルサイズを50-90%削減
+2. **テクスチャ圧縮**: 1024x1024以下、WebP推奨
+3. **ポリゴン削減**: 10,000ポリゴン以下を目安
+4. **不要データ削除**: アニメーション、ライト等
+
+### 推奨ツール:
+- gltf-pipeline (コマンドライン)
+- gltf-transform (Node.js)
+- Blender GLTFエクスポーター
+- online gltf optimizer
+
+### 品質チェック:
+- Three.js Editor (threejs.org/editor) で事前確認
+- ファイルサイズが大きすぎる場合は圧縮を検討

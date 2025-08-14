@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* カスタムスタイル */
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply h-full;
+  }
+
+  body {
+    @apply h-full bg-space-dark text-white overflow-hidden;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .modal-backdrop {
+    @apply fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center;
+    backdrop-filter: blur(5px);
+  }
+
+  .space-monitor {
+    @apply bg-gradient-to-br from-space-blue to-space-purple border border-cosmic-plasma rounded-lg p-6;
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 20px rgba(6, 182, 212, 0.3);
+  }
+
+  .glow-text {
+    text-shadow: 0 0 10px rgba(124, 58, 237, 0.8);
+  }
+
+  .star-field {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+/* スクロールバーのカスタマイズ */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 58, 138, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.8);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 1);
+}
