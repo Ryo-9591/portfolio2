@@ -47,28 +47,28 @@ export default function SafeGLTFLoader({
                   (gltf) => {
                     if (!mounted) return
                     
-                                      // マテリアルを安全に変換（色情報保持）
-                  gltf.scene.traverse((child) => {
-                    if (child instanceof THREE.Mesh && child.material) {
-                      if (child.material instanceof THREE.MeshStandardMaterial || 
-                          child.material instanceof THREE.MeshPhysicalMaterial) {
-                        // 元のマテリアルの色とテクスチャを保持
-                        const originalColor = child.material.color ? child.material.color.clone() : new THREE.Color(0xffffff)
-                        const originalMap = child.material.map
-                        const originalEmissive = child.material.emissive ? child.material.emissive.clone() : new THREE.Color(0x000000)
-                        
-                        child.material = new THREE.MeshBasicMaterial({
-                          map: originalMap,
-                          color: originalColor,
-                          transparent: child.material.transparent || false,
-                          opacity: child.material.opacity !== undefined ? child.material.opacity : 1.0,
-                          side: child.material.side || THREE.FrontSide,
-                          // エミッシブ色を追加して発光効果を保持
-                          ...(originalEmissive.getHex() !== 0 && { color: originalEmissive })
-                        })
+                    // マテリアルを安全に変換（色情報保持）
+                    gltf.scene.traverse((child) => {
+                      if (child instanceof THREE.Mesh && child.material) {
+                        if (child.material instanceof THREE.MeshStandardMaterial || 
+                            child.material instanceof THREE.MeshPhysicalMaterial) {
+                          // 元のマテリアルの色とテクスチャを保持
+                          const originalColor = child.material.color ? child.material.color.clone() : new THREE.Color(0xffffff)
+                          const originalMap = child.material.map
+                          const originalEmissive = child.material.emissive ? child.material.emissive.clone() : new THREE.Color(0x000000)
+                          
+                          child.material = new THREE.MeshBasicMaterial({
+                            map: originalMap,
+                            color: originalColor,
+                            transparent: child.material.transparent || false,
+                            opacity: child.material.opacity !== undefined ? child.material.opacity : 1.0,
+                            side: child.material.side || THREE.FrontSide,
+                            // エミッシブ色を追加して発光効果を保持
+                            ...(originalEmissive.getHex() !== 0 && { color: originalEmissive })
+                          })
+                        }
                       }
-                    }
-                  })
+                    })
                     
                     setScene(gltf.scene)
                     setLoadState('success')
@@ -161,8 +161,13 @@ export default function SafeGLTFLoader({
     }
   })
 
-  // ローディング中またはエラーの場合はフォールバック
-  if (loadState === 'loading' || loadState === 'error' || !scene) {
+  // ローディング中は何も表示しない
+  if (loadState === 'loading') {
+    return null
+  }
+
+  // エラーの場合のみフォールバックを表示
+  if (loadState === 'error' || !scene) {
     return <FallbackComponent {...props} />
   }
 

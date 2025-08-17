@@ -14,6 +14,7 @@ import ProfileModal from './modals/ProfileModal'
 import ProjectModal from './modals/ProjectModal'
 import ContactModal from './modals/ContactModal'
 import HoverInfo from './ui/HoverInfo'
+import SpeechBubble from './ui/SpeechBubble'
 import { AnimatePresence } from 'framer-motion'
 
 export interface HoverData {
@@ -107,7 +108,7 @@ export default function SpaceScene() {
             modelPath="/models/rocket.glb"
             fallbackComponent={RocketFallback}
             position={[0, 0, 0]}
-            scale={[6.0, 6.0, 6.0]}
+            scale={[4.5, 4.5, 4.5]}
             optimizationLevel="high"
             enableLOD={true}
             enableStats={false}
@@ -144,7 +145,7 @@ export default function SpaceScene() {
             modelPath="/models/astronaut.glb"
             fallbackComponent={AstronautFallback}
             position={[12, 8, 6]}
-            scale={[5.0, 5.0, 5.0]}
+            scale={[3.5, 3.5, 3.5]}
             optimizationLevel="high"
             enableLOD={true}
             enableStats={false}
@@ -185,11 +186,12 @@ export default function SpaceScene() {
             return (
               <Universal3DModel
                 key={project.id}
-                modelPath={`/models/${project.planetModel}`}
+                modelPath={project.planetModel === 'jupiter.glb' ? '/models/sun.glb' : 
+                          project.planetModel === 'earth.glb' ? '/models/moon.glb' : `/models/${project.planetModel}`}
                 fallbackComponent={ProjectFallback}
                 position={[x, Math.sin(angle * 2) * 3 + 5, z]}
-                scale={project.planetModel === 'jupiter.glb' ? [1.0, 1.0, 1.0] : 
-                       project.planetModel === 'earth.glb' ? [0.8, 0.8, 0.8] : [10.0, 10.0, 10.0]}
+                scale={project.planetModel === 'jupiter.glb' ? [0.3, 0.3, 0.3] : 
+                       project.planetModel === 'earth.glb' ? [0.4, 0.4, 0.4] : [7.0, 7.0, 7.0]}
                 optimizationLevel="project"
                 enableLOD={false}
                 enableStats={false}
@@ -216,7 +218,7 @@ export default function SpaceScene() {
             modelPath="/models/satelite.glb"
             fallbackComponent={SatelliteFallback}
             position={[35, -15, 30]}
-            scale={[0.15, 0.15, 0.15]}
+            scale={[0.1, 0.1, 0.1]}
             optimizationLevel="high"
             enableLOD={true}
             enableStats={false}
@@ -251,8 +253,8 @@ export default function SpaceScene() {
           <Universal3DModel
             modelPath="/models/space-station.glb"
             fallbackComponent={SpaceStationFallback}
-            position={[-40, 25, -20]}
-            scale={[3.0, 3.0, 3.0]}
+            position={[-60, 25, -25]}
+            scale={[2.2, 2.2, 2.2]}
             optimizationLevel="high"
             enableLOD={true}
             enableStats={false}
@@ -272,9 +274,34 @@ export default function SpaceScene() {
             onPointerOut={() => setHoverData(null)}
           />
 
+          {/* Earthモデル - stationの左下に配置 */}
+          <Universal3DModel
+            modelPath="/models/earth.glb"
+            fallbackComponent={ProjectFallback}
+            position={[-25, -25, 2]}
+            scale={[0.9, 0.9, 0.9]}
+            optimizationLevel="project"
+            enableLOD={false}
+            enableStats={false}
+            animation={{
+              rotation: { axis: 'y', speed: 0.3, amplitude: 1 }
+            }}
+            onClick={() => setActiveModal('earth')}
+            onPointerOver={(event) => {
+              if (event) {
+                setHoverData({
+                  title: '🌍 地球',
+                  description: '私たちの故郷の星',
+                  position: { x: event.clientX, y: event.clientY }
+                })
+              }
+            }}
+            onPointerOut={() => setHoverData(null)}
+          />
+
           <RotatingTextBelt2D
             text="STATION"
-            centerPosition={[-40, 35, -20]}
+            centerPosition={[-60, 35, -25]}
             radius={10}
             height={35}
             rotationSpeed={0.5}
@@ -307,6 +334,8 @@ export default function SpaceScene() {
           })}
         </Suspense>
       </Canvas>
+
+
 
       <AnimatePresence>
         {hoverData && <HoverInfo data={hoverData} />}
